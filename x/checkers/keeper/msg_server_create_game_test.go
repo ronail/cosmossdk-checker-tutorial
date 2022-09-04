@@ -18,7 +18,7 @@ const (
 )
 
 func TestCreateGame(t *testing.T) {
-    msgServer, context := setupMsgServerCreateGame(t)
+    msgServer, _, context := setupMsgServerCreateGame(t)
     createResponse, err := msgServer.CreateGame(context, &types.MsgCreateGame{
         Creator: alice,
         Red:     bob,
@@ -30,8 +30,34 @@ func TestCreateGame(t *testing.T) {
     }, *createResponse)
 }
 
-func setupMsgServerCreateGame(t testing.TB) (types.MsgServer, context.Context) {
+func TestCreate1GameHasSaved(t *testing.T) {
+    msgSrvr, keeper, context := setupMsgServerCreateGame(t)
+    msgSrvr.CreateGame(context, &types.MsgCreateGame{
+        Creator: alice,
+        Red:     bob,
+        Black:   carol,
+    })
+    nextGame, found := keeper.GetNextGame(sdk.UnwrapSDKContext(context))
+    require.True(t, found)
+    require.EqualValues(t, types.NextGame{
+        Creator: "",
+        IdValue: 2,
+    }, nextGame)
+    game1, found1 := keeper.GetStoredGame(sdk.UnwrapSDKContext(context), "1")
+    require.True(t, found1)
+    require.EqualValues(t, types.StoredGame{
+        Creator: alice,
+        Index:   "1",
+        Game:    "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
+        Turn:    "b",
+        Red:     bob,
+        Black:   carol,
+    }, game1)
+}
+
+
+func setupMsgServerCreateGame(t testing.TB) (types.MsgServer, keeper.Keeper, context.Context) {
     k, ctx := setupKeeper(t)
     checkers.InitGenesis(ctx, *k, *types.DefaultGenesis())
-    return keeper.NewMsgServerImpl(*k), sdk.WrapSDKContext(ctx)
+    return keeper.NewMsgServerImpl(*k), *k, sdk.WrapSDKContext(ctx)
 }
