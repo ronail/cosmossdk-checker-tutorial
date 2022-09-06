@@ -32,3 +32,11 @@ const (
 const (
 	StoredGameKey = "StoredGame-value-"
 )
+
+const (
+  StoredGameEventKey     = "NewGameCreated" // Indicates what key to listen to
+  StoredGameEventCreator = "Creator"
+  StoredGameEventIndex   = "Index" // What game is relevant
+  StoredGameEventRed     = "Red" // Is it relevant to me?
+  StoredGameEventBlack   = "Black" // Is it relevant to me?
+)
