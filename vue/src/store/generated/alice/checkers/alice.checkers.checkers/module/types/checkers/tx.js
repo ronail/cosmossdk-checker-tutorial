@@ -2,6 +2,108 @@
 import { Reader, util, configure, Writer } from 'protobufjs/minimal';
 import * as Long from 'long';
 export const protobufPackage = 'alice.checkers.checkers';
+const baseMsgRejectGame = { creator: '', gameIndex: '' };
+export const MsgRejectGame = {
+    encode(message, writer = Writer.create()) {
+        if (message.creator !== '') {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.gameIndex !== '') {
+            writer.uint32(18).string(message.gameIndex);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgRejectGame };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.gameIndex = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgRejectGame };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = String(object.creator);
+        }
+        else {
+            message.creator = '';
+        }
+        if (object.gameIndex !== undefined && object.gameIndex !== null) {
+            message.gameIndex = String(object.gameIndex);
+        }
+        else {
+            message.gameIndex = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.gameIndex !== undefined && (obj.gameIndex = message.gameIndex);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgRejectGame };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = object.creator;
+        }
+        else {
+            message.creator = '';
+        }
+        if (object.gameIndex !== undefined && object.gameIndex !== null) {
+            message.gameIndex = object.gameIndex;
+        }
+        else {
+            message.gameIndex = '';
+        }
+        return message;
+    }
+};
+const baseMsgRejectGameResponse = {};
+export const MsgRejectGameResponse = {
+    encode(_, writer = Writer.create()) {
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgRejectGameResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(_) {
+        const message = { ...baseMsgRejectGameResponse };
+        return message;
+    },
+    toJSON(_) {
+        const obj = {};
+        return obj;
+    },
+    fromPartial(_) {
+        const message = { ...baseMsgRejectGameResponse };
+        return message;
+    }
+};
 const baseMsgPlayMove = { creator: '', idValue: '', fromX: 0, fromY: 0, toX: 0, toY: 0 };
 export const MsgPlayMove = {
     encode(message, writer = Writer.create()) {
@@ -399,6 +501,11 @@ export const MsgCreateGameResponse = {
 export class MsgClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
+    }
+    RejectGame(request) {
+        const data = MsgRejectGame.encode(request).finish();
+        const promise = this.rpc.request('alice.checkers.checkers.Msg', 'RejectGame', data);
+        return promise.then((data) => MsgRejectGameResponse.decode(new Reader(data)));
     }
     PlayMove(request) {
         const data = MsgPlayMove.encode(request).finish();

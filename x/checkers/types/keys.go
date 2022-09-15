@@ -34,19 +34,18 @@ const (
 )
 
 const (
-  StoredGameEventKey     = "NewGameCreated" // Indicates what key to listen to
-  StoredGameEventCreator = "Creator"
-  StoredGameEventIndex   = "Index" // What game is relevant
-  StoredGameEventRed     = "Red" // Is it relevant to me?
-  StoredGameEventBlack   = "Black" // Is it relevant to me?
+	StoredGameEventKey     = "NewGameCreated" // Indicates what key to listen to
+	StoredGameEventCreator = "Creator"
+	StoredGameEventIndex   = "Index" // What game is relevant
+	StoredGameEventRed     = "Red"   // Is it relevant to me?
+	StoredGameEventBlack   = "Black" // Is it relevant to me?
 )
 
 const (
-  PlayMoveEventKey       = "MovePlayed"
-  PlayMoveEventCreator   = "Creator"
-  PlayMoveEventIdValue   = "IdValue"
-  PlayMoveEventCapturedX = "CapturedX"
-  PlayMoveEventCapturedY = "CapturedY"
-  PlayMoveEventWinner    = "Winner"
+	PlayMoveEventKey       = "MovePlayed"
+	PlayMoveEventCreator   = "Creator"
+	PlayMoveEventIdValue   = "IdValue"
+	PlayMoveEventCapturedX = "CapturedX"
+	PlayMoveEventCapturedY = "CapturedY"
+	PlayMoveEventWinner    = "Winner"
 )
-

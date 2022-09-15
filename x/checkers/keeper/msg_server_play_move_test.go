@@ -12,60 +12,60 @@ import (
 )
 
 func setupMsgServerWithOneGameForPlayMove(t testing.TB) (types.MsgServer, keeper.Keeper, context.Context) {
-    k, ctx := setupKeeper(t)
-    checkers.InitGenesis(ctx, *k, *types.DefaultGenesis())
-    server := keeper.NewMsgServerImpl(*k)
-    context := sdk.WrapSDKContext(ctx)
-    server.CreateGame(context, &types.MsgCreateGame{
-        Creator: alice,
-        Red:     bob,
-        Black:   carol,
-    })
-    return server, *k, context
+	k, ctx := setupKeeper(t)
+	checkers.InitGenesis(ctx, *k, *types.DefaultGenesis())
+	server := keeper.NewMsgServerImpl(*k)
+	context := sdk.WrapSDKContext(ctx)
+	server.CreateGame(context, &types.MsgCreateGame{
+		Creator: alice,
+		Red:     bob,
+		Black:   carol,
+	})
+	return server, *k, context
 }
 
 func TestPlayMove(t *testing.T) {
-    msgServer, _, context := setupMsgServerWithOneGameForPlayMove(t)
-    playMoveResponse, err := msgServer.PlayMove(context, &types.MsgPlayMove{
-        Creator: carol,
-        IdValue: "1",
-        FromX:   1,
-        FromY:   2,
-        ToX:     2,
-        ToY:     3,
-    })
-    require.Nil(t, err)
-    require.EqualValues(t, types.MsgPlayMoveResponse{
-        IdValue:   "1",
-        CapturedX: -1,
-        CapturedY: -1,
-        Winner:    "*",
-    }, *playMoveResponse)
+	msgServer, _, context := setupMsgServerWithOneGameForPlayMove(t)
+	playMoveResponse, err := msgServer.PlayMove(context, &types.MsgPlayMove{
+		Creator: carol,
+		IdValue: "1",
+		FromX:   1,
+		FromY:   2,
+		ToX:     2,
+		ToY:     3,
+	})
+	require.Nil(t, err)
+	require.EqualValues(t, types.MsgPlayMoveResponse{
+		IdValue:   "1",
+		CapturedX: -1,
+		CapturedY: -1,
+		Winner:    "*",
+	}, *playMoveResponse)
 }
 
 func TestPlayMoveEmitted(t *testing.T) {
-    msgServer, _, context := setupMsgServerWithOneGameForPlayMove(t)
-    msgServer.PlayMove(context, &types.MsgPlayMove{
-        Creator: carol,
-        IdValue: "1",
-        FromX:   1,
-        FromY:   2,
-        ToX:     2,
-        ToY:     3,
-    })
-    ctx := sdk.UnwrapSDKContext(context)
-    require.NotNil(t, ctx)
-    events := sdk.StringifyEvents(ctx.EventManager().ABCIEvents())
-    require.Len(t, events, 1)
-    event := events[0]
-    require.Equal(t, event.Type, "message")
-    require.EqualValues(t, []sdk.Attribute{
-        {Key: "module", Value: "checkers"},
-        {Key: "action", Value: "MovePlayed"},
-        {Key: "Creator", Value: carol},
-        {Key: "IdValue", Value: "1"},
-        {Key: "CapturedX", Value: "-1"},
-        {Key: "CapturedY", Value: "-1"},
-        {Key: "Winner", Value: "*"},
-    }, event.Attributes[6:])
+	msgServer, _, context := setupMsgServerWithOneGameForPlayMove(t)
+	msgServer.PlayMove(context, &types.MsgPlayMove{
+		Creator: carol,
+		IdValue: "1",
+		FromX:   1,
+		FromY:   2,
+		ToX:     2,
+		ToY:     3,
+	})
+	ctx := sdk.UnwrapSDKContext(context)
+	require.NotNil(t, ctx)
+	events := sdk.StringifyEvents(ctx.EventManager().ABCIEvents())
+	require.Len(t, events, 1)
+	event := events[0]
+	require.Equal(t, event.Type, "message")
+	require.EqualValues(t, []sdk.Attribute{
+		{Key: "module", Value: "checkers"},
+		{Key: "action", Value: "MovePlayed"},
+		{Key: "Creator", Value: carol},
+		{Key: "IdValue", Value: "1"},
+		{Key: "CapturedX", Value: "-1"},
+		{Key: "CapturedY", Value: "-1"},
+		{Key: "Winner", Value: "*"},
+	}, event.Attributes[6:])
 }
