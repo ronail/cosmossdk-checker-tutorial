@@ -56,6 +56,10 @@ export interface CheckersQueryGetStoredGameResponse {
   StoredGame?: CheckersStoredGame;
 }
 
+export interface CheckersQueryGetSystemInfoResponse {
+  SystemInfo?: CheckersSystemInfo;
+}
+
 export interface CheckersStoredGame {
   creator?: string;
   index?: string;
@@ -66,6 +70,13 @@ export interface CheckersStoredGame {
 
   /** @format uint64 */
   moveCount?: string;
+}
+
+export interface CheckersSystemInfo {
+  creator?: string;
+
+  /** @format uint64 */
+  nextId?: string;
 }
 
 export interface ProtobufAny {
@@ -383,6 +394,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryStoredGame = (index: string, params: RequestParams = {}) =>
     this.request<CheckersQueryGetStoredGameResponse, RpcStatus>({
       path: `/alice/checkers/checkers/storedGame/${index}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySystemInfo
+   * @summary Queries a systemInfo by index.
+   * @request GET:/alice/checkers/checkers/systemInfo
+   */
+  querySystemInfo = (params: RequestParams = {}) =>
+    this.request<CheckersQueryGetSystemInfoResponse, RpcStatus>({
+      path: `/alice/checkers/checkers/systemInfo`,
       method: "GET",
       format: "json",
       ...params,

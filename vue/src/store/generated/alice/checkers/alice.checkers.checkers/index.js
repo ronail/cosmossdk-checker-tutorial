@@ -3,7 +3,8 @@ import { txClient, queryClient, MissingWalletError } from './module';
 import { SpVuexError } from '@starport/vuex';
 import { NextGame } from "./module/types/checkers/next_game";
 import { StoredGame } from "./module/types/checkers/stored_game";
-export { NextGame, StoredGame };
+import { SystemInfo } from "./module/types/checkers/system_info";
+export { NextGame, StoredGame, SystemInfo };
 async function initTxClient(vuexGetters) {
     return await txClient(vuexGetters['common/wallet/signer'], {
         addr: vuexGetters['common/env/apiTendermint']
@@ -37,12 +38,14 @@ function getStructure(template) {
 }
 const getDefaultState = () => {
     return {
+        SystemInfo: {},
         StoredGame: {},
         StoredGameAll: {},
         NextGame: {},
         _Structure: {
             NextGame: getStructure(NextGame.fromPartial({})),
             StoredGame: getStructure(StoredGame.fromPartial({})),
+            SystemInfo: getStructure(SystemInfo.fromPartial({})),
         },
         _Subscriptions: new Set(),
     };
@@ -67,6 +70,12 @@ export default {
         }
     },
     getters: {
+        getSystemInfo: (state) => (params = { params: {} }) => {
+            if (!params.query) {
+                params.query = null;
+            }
+            return state.SystemInfo[JSON.stringify(params)] ?? {};
+        },
         getStoredGame: (state) => (params = { params: {} }) => {
             if (!params.query) {
                 params.query = null;
@@ -113,6 +122,19 @@ export default {
                     throw new SpVuexError('Subscriptions: ' + e.message);
                 }
             });
+        },
+        async QuerySystemInfo({ commit, rootGetters, getters }, { options: { subscribe, all } = { subscribe: false, all: false }, params: { ...key }, query = null }) {
+            try {
+                const queryClient = await initQueryClient(rootGetters);
+                let value = (await queryClient.querySystemInfo()).data;
+                commit('QUERY', { query: 'SystemInfo', key: { params: { ...key }, query }, value });
+                if (subscribe)
+                    commit('SUBSCRIBE', { action: 'QuerySystemInfo', payload: { options: { all }, params: { ...key }, query } });
+                return getters['getSystemInfo']({ params: { ...key }, query }) ?? {};
+            }
+            catch (e) {
+                throw new SpVuexError('QueryClient:QuerySystemInfo', 'API Node Unavailable. Could not perform query: ' + e.message);
+            }
         },
         async QueryStoredGame({ commit, rootGetters, getters }, { options: { subscribe, all } = { subscribe: false, all: false }, params: { ...key }, query = null }) {
             try {

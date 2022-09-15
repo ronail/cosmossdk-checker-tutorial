@@ -1,3 +1,4 @@
+import { SystemInfo } from '../checkers/system_info';
 import { StoredGame } from '../checkers/stored_game';
 import { NextGame } from '../checkers/next_game';
 import { Writer, Reader } from 'protobufjs/minimal';
@@ -5,6 +6,8 @@ export declare const protobufPackage = "alice.checkers.checkers";
 /** GenesisState defines the checkers module's genesis state. */
 export interface GenesisState {
     /** this line is used by starport scaffolding # genesis/proto/state */
+    systemInfo: SystemInfo | undefined;
+    /** this line is used by starport scaffolding # genesis/proto/stateField */
     storedGameList: StoredGame[];
     /** this line is used by starport scaffolding # genesis/proto/stateField */
     nextGame: NextGame | undefined;

@@ -55,3 +55,7 @@ const (
 	GameRejectedEventCreator   = "creator"
 	GameRejectedEventGameIndex = "game-index"
 )
+
+const (
+	SystemInfoKey = "SystemInfo-value-"
+)

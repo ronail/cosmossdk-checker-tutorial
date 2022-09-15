@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { Reader, Writer } from 'protobufjs/minimal'
+import { SystemInfo } from '../checkers/system_info'
 import { StoredGame } from '../checkers/stored_game'
 import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination'
 import { NextGame } from '../checkers/next_game'
@@ -7,6 +8,12 @@ import { NextGame } from '../checkers/next_game'
 export const protobufPackage = 'alice.checkers.checkers'
 
 /** this line is used by starport scaffolding # 3 */
+export interface QueryGetSystemInfoRequest {}
+
+export interface QueryGetSystemInfoResponse {
+  SystemInfo: SystemInfo | undefined
+}
+
 export interface QueryGetStoredGameRequest {
   index: string
 }
@@ -28,6 +35,99 @@ export interface QueryGetNextGameRequest {}
 
 export interface QueryGetNextGameResponse {
   NextGame: NextGame | undefined
+}
+
+const baseQueryGetSystemInfoRequest: object = {}
+
+export const QueryGetSystemInfoRequest = {
+  encode(_: QueryGetSystemInfoRequest, writer: Writer = Writer.create()): Writer {
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryGetSystemInfoRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryGetSystemInfoRequest } as QueryGetSystemInfoRequest
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(_: any): QueryGetSystemInfoRequest {
+    const message = { ...baseQueryGetSystemInfoRequest } as QueryGetSystemInfoRequest
+    return message
+  },
+
+  toJSON(_: QueryGetSystemInfoRequest): unknown {
+    const obj: any = {}
+    return obj
+  },
+
+  fromPartial(_: DeepPartial<QueryGetSystemInfoRequest>): QueryGetSystemInfoRequest {
+    const message = { ...baseQueryGetSystemInfoRequest } as QueryGetSystemInfoRequest
+    return message
+  }
+}
+
+const baseQueryGetSystemInfoResponse: object = {}
+
+export const QueryGetSystemInfoResponse = {
+  encode(message: QueryGetSystemInfoResponse, writer: Writer = Writer.create()): Writer {
+    if (message.SystemInfo !== undefined) {
+      SystemInfo.encode(message.SystemInfo, writer.uint32(10).fork()).ldelim()
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryGetSystemInfoResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryGetSystemInfoResponse } as QueryGetSystemInfoResponse
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.SystemInfo = SystemInfo.decode(reader, reader.uint32())
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryGetSystemInfoResponse {
+    const message = { ...baseQueryGetSystemInfoResponse } as QueryGetSystemInfoResponse
+    if (object.SystemInfo !== undefined && object.SystemInfo !== null) {
+      message.SystemInfo = SystemInfo.fromJSON(object.SystemInfo)
+    } else {
+      message.SystemInfo = undefined
+    }
+    return message
+  },
+
+  toJSON(message: QueryGetSystemInfoResponse): unknown {
+    const obj: any = {}
+    message.SystemInfo !== undefined && (obj.SystemInfo = message.SystemInfo ? SystemInfo.toJSON(message.SystemInfo) : undefined)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryGetSystemInfoResponse>): QueryGetSystemInfoResponse {
+    const message = { ...baseQueryGetSystemInfoResponse } as QueryGetSystemInfoResponse
+    if (object.SystemInfo !== undefined && object.SystemInfo !== null) {
+      message.SystemInfo = SystemInfo.fromPartial(object.SystemInfo)
+    } else {
+      message.SystemInfo = undefined
+    }
+    return message
+  }
 }
 
 const baseQueryGetStoredGameRequest: object = { index: '' }
@@ -369,6 +469,8 @@ export const QueryGetNextGameResponse = {
 
 /** Query defines the gRPC querier service. */
 export interface Query {
+  /** Queries a systemInfo by index. */
+  SystemInfo(request: QueryGetSystemInfoRequest): Promise<QueryGetSystemInfoResponse>
   /** Queries a storedGame by index. */
   StoredGame(request: QueryGetStoredGameRequest): Promise<QueryGetStoredGameResponse>
   /** Queries a list of storedGame items. */
@@ -382,6 +484,12 @@ export class QueryClientImpl implements Query {
   constructor(rpc: Rpc) {
     this.rpc = rpc
   }
+  SystemInfo(request: QueryGetSystemInfoRequest): Promise<QueryGetSystemInfoResponse> {
+    const data = QueryGetSystemInfoRequest.encode(request).finish()
+    const promise = this.rpc.request('alice.checkers.checkers.Query', 'SystemInfo', data)
+    return promise.then((data) => QueryGetSystemInfoResponse.decode(new Reader(data)))
+  }
+
   StoredGame(request: QueryGetStoredGameRequest): Promise<QueryGetStoredGameResponse> {
     const data = QueryGetStoredGameRequest.encode(request).finish()
     const promise = this.rpc.request('alice.checkers.checkers.Query', 'StoredGame', data)

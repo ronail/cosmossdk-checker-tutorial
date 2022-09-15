@@ -219,6 +219,44 @@ paths:
           type: string
       tags:
         - Query
+  /alice/checkers/checkers/systemInfo:
+    get:
+      summary: Queries a systemInfo by index.
+      operationId: AliceCheckersCheckersSystemInfo
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              SystemInfo:
+                type: object
+                properties:
+                  creator:
+                    type: string
+                  nextId:
+                    type: string
+                    format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
   '/cosmos/bank/v1beta1/balances/{address}':
     get:
       summary: AllBalances queries the balance of all coins for a single account.
@@ -19426,6 +19464,17 @@ definitions:
           moveCount:
             type: string
             format: uint64
+  alice.checkers.checkers.QueryGetSystemInfoResponse:
+    type: object
+    properties:
+      SystemInfo:
+        type: object
+        properties:
+          creator:
+            type: string
+          nextId:
+            type: string
+            format: uint64
   alice.checkers.checkers.StoredGame:
     type: object
     properties:
@@ -19442,6 +19491,14 @@ definitions:
       black:
         type: string
       moveCount:
+        type: string
+        format: uint64
+  alice.checkers.checkers.SystemInfo:
+    type: object
+    properties:
+      creator:
+        type: string
+      nextId:
         type: string
         format: uint64
   cosmos.base.query.v1beta1.PageRequest:

@@ -1,9 +1,15 @@
 import { Reader, Writer } from 'protobufjs/minimal';
+import { SystemInfo } from '../checkers/system_info';
 import { StoredGame } from '../checkers/stored_game';
 import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
 import { NextGame } from '../checkers/next_game';
 export declare const protobufPackage = "alice.checkers.checkers";
 /** this line is used by starport scaffolding # 3 */
+export interface QueryGetSystemInfoRequest {
+}
+export interface QueryGetSystemInfoResponse {
+    SystemInfo: SystemInfo | undefined;
+}
 export interface QueryGetStoredGameRequest {
     index: string;
 }
@@ -22,6 +28,20 @@ export interface QueryGetNextGameRequest {
 export interface QueryGetNextGameResponse {
     NextGame: NextGame | undefined;
 }
+export declare const QueryGetSystemInfoRequest: {
+    encode(_: QueryGetSystemInfoRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetSystemInfoRequest;
+    fromJSON(_: any): QueryGetSystemInfoRequest;
+    toJSON(_: QueryGetSystemInfoRequest): unknown;
+    fromPartial(_: DeepPartial<QueryGetSystemInfoRequest>): QueryGetSystemInfoRequest;
+};
+export declare const QueryGetSystemInfoResponse: {
+    encode(message: QueryGetSystemInfoResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetSystemInfoResponse;
+    fromJSON(object: any): QueryGetSystemInfoResponse;
+    toJSON(message: QueryGetSystemInfoResponse): unknown;
+    fromPartial(object: DeepPartial<QueryGetSystemInfoResponse>): QueryGetSystemInfoResponse;
+};
 export declare const QueryGetStoredGameRequest: {
     encode(message: QueryGetStoredGameRequest, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): QueryGetStoredGameRequest;
@@ -66,6 +86,8 @@ export declare const QueryGetNextGameResponse: {
 };
 /** Query defines the gRPC querier service. */
 export interface Query {
+    /** Queries a systemInfo by index. */
+    SystemInfo(request: QueryGetSystemInfoRequest): Promise<QueryGetSystemInfoResponse>;
     /** Queries a storedGame by index. */
     StoredGame(request: QueryGetStoredGameRequest): Promise<QueryGetStoredGameResponse>;
     /** Queries a list of storedGame items. */
@@ -76,6 +98,7 @@ export interface Query {
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
     constructor(rpc: Rpc);
+    SystemInfo(request: QueryGetSystemInfoRequest): Promise<QueryGetSystemInfoResponse>;
     StoredGame(request: QueryGetStoredGameRequest): Promise<QueryGetStoredGameResponse>;
     StoredGameAll(request: QueryAllStoredGameRequest): Promise<QueryAllStoredGameResponse>;
     NextGame(request: QueryGetNextGameRequest): Promise<QueryGetNextGameResponse>;

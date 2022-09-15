@@ -179,5 +179,19 @@ export class Api extends HttpClient {
             format: "json",
             ...params,
         });
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QuerySystemInfo
+         * @summary Queries a systemInfo by index.
+         * @request GET:/alice/checkers/checkers/systemInfo
+         */
+        this.querySystemInfo = (params = {}) => this.request({
+            path: `/alice/checkers/checkers/systemInfo`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
     }
 }

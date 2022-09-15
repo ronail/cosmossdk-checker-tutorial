@@ -1,9 +1,93 @@
 /* eslint-disable */
 import { Reader, Writer } from 'protobufjs/minimal';
+import { SystemInfo } from '../checkers/system_info';
 import { StoredGame } from '../checkers/stored_game';
 import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
 import { NextGame } from '../checkers/next_game';
 export const protobufPackage = 'alice.checkers.checkers';
+const baseQueryGetSystemInfoRequest = {};
+export const QueryGetSystemInfoRequest = {
+    encode(_, writer = Writer.create()) {
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryGetSystemInfoRequest };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(_) {
+        const message = { ...baseQueryGetSystemInfoRequest };
+        return message;
+    },
+    toJSON(_) {
+        const obj = {};
+        return obj;
+    },
+    fromPartial(_) {
+        const message = { ...baseQueryGetSystemInfoRequest };
+        return message;
+    }
+};
+const baseQueryGetSystemInfoResponse = {};
+export const QueryGetSystemInfoResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.SystemInfo !== undefined) {
+            SystemInfo.encode(message.SystemInfo, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryGetSystemInfoResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.SystemInfo = SystemInfo.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryGetSystemInfoResponse };
+        if (object.SystemInfo !== undefined && object.SystemInfo !== null) {
+            message.SystemInfo = SystemInfo.fromJSON(object.SystemInfo);
+        }
+        else {
+            message.SystemInfo = undefined;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.SystemInfo !== undefined && (obj.SystemInfo = message.SystemInfo ? SystemInfo.toJSON(message.SystemInfo) : undefined);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryGetSystemInfoResponse };
+        if (object.SystemInfo !== undefined && object.SystemInfo !== null) {
+            message.SystemInfo = SystemInfo.fromPartial(object.SystemInfo);
+        }
+        else {
+            message.SystemInfo = undefined;
+        }
+        return message;
+    }
+};
 const baseQueryGetStoredGameRequest = { index: '' };
 export const QueryGetStoredGameRequest = {
     encode(message, writer = Writer.create()) {
@@ -319,6 +403,11 @@ export const QueryGetNextGameResponse = {
 export class QueryClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
+    }
+    SystemInfo(request) {
+        const data = QueryGetSystemInfoRequest.encode(request).finish();
+        const promise = this.rpc.request('alice.checkers.checkers.Query', 'SystemInfo', data);
+        return promise.then((data) => QueryGetSystemInfoResponse.decode(new Reader(data)));
     }
     StoredGame(request) {
         const data = QueryGetStoredGameRequest.encode(request).finish();
