@@ -38,7 +38,6 @@ export interface CheckersQueryGetSystemInfoResponse {
     SystemInfo?: CheckersSystemInfo;
 }
 export interface CheckersStoredGame {
-    creator?: string;
     index?: string;
     game?: string;
     turn?: string;
@@ -48,7 +47,6 @@ export interface CheckersStoredGame {
     moveCount?: string;
 }
 export interface CheckersSystemInfo {
-    creator?: string;
     /** @format uint64 */
     nextId?: string;
 }

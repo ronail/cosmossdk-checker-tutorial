@@ -14,7 +14,6 @@ import (
 func createNStoredGame(keeper *keeper.Keeper, ctx sdk.Context, n int) []types.StoredGame {
 	items := make([]types.StoredGame, n)
 	for i := range items {
-		items[i].Creator = "any"
 		items[i].Index = fmt.Sprintf("%d", i)
 		keeper.SetStoredGame(ctx, items[i])
 	}

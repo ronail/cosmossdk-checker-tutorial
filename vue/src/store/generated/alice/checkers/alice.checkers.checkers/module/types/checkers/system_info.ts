@@ -5,19 +5,15 @@ import { util, configure, Writer, Reader } from 'protobufjs/minimal'
 export const protobufPackage = 'alice.checkers.checkers'
 
 export interface SystemInfo {
-  creator: string
   nextId: number
 }
 
-const baseSystemInfo: object = { creator: '', nextId: 0 }
+const baseSystemInfo: object = { nextId: 0 }
 
 export const SystemInfo = {
   encode(message: SystemInfo, writer: Writer = Writer.create()): Writer {
-    if (message.creator !== '') {
-      writer.uint32(10).string(message.creator)
-    }
     if (message.nextId !== 0) {
-      writer.uint32(16).uint64(message.nextId)
+      writer.uint32(8).uint64(message.nextId)
     }
     return writer
   },
@@ -30,9 +26,6 @@ export const SystemInfo = {
       const tag = reader.uint32()
       switch (tag >>> 3) {
         case 1:
-          message.creator = reader.string()
-          break
-        case 2:
           message.nextId = longToNumber(reader.uint64() as Long)
           break
         default:
@@ -45,11 +38,6 @@ export const SystemInfo = {
 
   fromJSON(object: any): SystemInfo {
     const message = { ...baseSystemInfo } as SystemInfo
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator)
-    } else {
-      message.creator = ''
-    }
     if (object.nextId !== undefined && object.nextId !== null) {
       message.nextId = Number(object.nextId)
     } else {
@@ -60,18 +48,12 @@ export const SystemInfo = {
 
   toJSON(message: SystemInfo): unknown {
     const obj: any = {}
-    message.creator !== undefined && (obj.creator = message.creator)
     message.nextId !== undefined && (obj.nextId = message.nextId)
     return obj
   },
 
   fromPartial(object: DeepPartial<SystemInfo>): SystemInfo {
     const message = { ...baseSystemInfo } as SystemInfo
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator
-    } else {
-      message.creator = ''
-    }
     if (object.nextId !== undefined && object.nextId !== null) {
       message.nextId = object.nextId
     } else {

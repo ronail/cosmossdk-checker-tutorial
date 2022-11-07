@@ -9,11 +9,6 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-func (storedGame *StoredGame) GetCreatorAddress() (creator sdk.AccAddress, err error) {
-	creator, errCreator := sdk.AccAddressFromBech32(storedGame.Creator)
-	return creator, sdkerrors.Wrapf(errCreator, ErrInvalidCreator.Error(), storedGame.Creator)
-}
-
 func (storedGame *StoredGame) GetRedAddress() (red sdk.AccAddress, err error) {
 	red, errRed := sdk.AccAddressFromBech32(storedGame.Red)
 	return red, sdkerrors.Wrapf(errRed, ErrInvalidRed.Error(), storedGame.Red)
@@ -37,10 +32,6 @@ func (storedGame *StoredGame) ParseGame() (game *rules.Game, err error) {
 }
 
 func (storedGame StoredGame) Validate() (err error) {
-	_, err = storedGame.GetCreatorAddress()
-	if err != nil {
-		return err
-	}
 	_, err = storedGame.ParseGame()
 	if err != nil {
 		return err

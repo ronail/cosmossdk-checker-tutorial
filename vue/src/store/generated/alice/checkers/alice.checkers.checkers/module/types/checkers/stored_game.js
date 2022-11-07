@@ -2,29 +2,26 @@
 import * as Long from 'long';
 import { util, configure, Writer, Reader } from 'protobufjs/minimal';
 export const protobufPackage = 'alice.checkers.checkers';
-const baseStoredGame = { creator: '', index: '', game: '', turn: '', red: '', black: '', moveCount: 0 };
+const baseStoredGame = { index: '', game: '', turn: '', red: '', black: '', moveCount: 0 };
 export const StoredGame = {
     encode(message, writer = Writer.create()) {
-        if (message.creator !== '') {
-            writer.uint32(10).string(message.creator);
-        }
         if (message.index !== '') {
-            writer.uint32(18).string(message.index);
+            writer.uint32(10).string(message.index);
         }
         if (message.game !== '') {
-            writer.uint32(26).string(message.game);
+            writer.uint32(18).string(message.game);
         }
         if (message.turn !== '') {
-            writer.uint32(34).string(message.turn);
+            writer.uint32(26).string(message.turn);
         }
         if (message.red !== '') {
-            writer.uint32(42).string(message.red);
+            writer.uint32(34).string(message.red);
         }
         if (message.black !== '') {
-            writer.uint32(50).string(message.black);
+            writer.uint32(42).string(message.black);
         }
         if (message.moveCount !== 0) {
-            writer.uint32(56).uint64(message.moveCount);
+            writer.uint32(48).uint64(message.moveCount);
         }
         return writer;
     },
@@ -36,24 +33,21 @@ export const StoredGame = {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.creator = reader.string();
-                    break;
-                case 2:
                     message.index = reader.string();
                     break;
-                case 3:
+                case 2:
                     message.game = reader.string();
                     break;
-                case 4:
+                case 3:
                     message.turn = reader.string();
                     break;
-                case 5:
+                case 4:
                     message.red = reader.string();
                     break;
-                case 6:
+                case 5:
                     message.black = reader.string();
                     break;
-                case 7:
+                case 6:
                     message.moveCount = longToNumber(reader.uint64());
                     break;
                 default:
@@ -65,12 +59,6 @@ export const StoredGame = {
     },
     fromJSON(object) {
         const message = { ...baseStoredGame };
-        if (object.creator !== undefined && object.creator !== null) {
-            message.creator = String(object.creator);
-        }
-        else {
-            message.creator = '';
-        }
         if (object.index !== undefined && object.index !== null) {
             message.index = String(object.index);
         }
@@ -111,7 +99,6 @@ export const StoredGame = {
     },
     toJSON(message) {
         const obj = {};
-        message.creator !== undefined && (obj.creator = message.creator);
         message.index !== undefined && (obj.index = message.index);
         message.game !== undefined && (obj.game = message.game);
         message.turn !== undefined && (obj.turn = message.turn);
@@ -122,12 +109,6 @@ export const StoredGame = {
     },
     fromPartial(object) {
         const message = { ...baseStoredGame };
-        if (object.creator !== undefined && object.creator !== null) {
-            message.creator = object.creator;
-        }
-        else {
-            message.creator = '';
-        }
         if (object.index !== undefined && object.index !== null) {
             message.index = object.index;
         }

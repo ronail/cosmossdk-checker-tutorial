@@ -1,7 +1,6 @@
 import { Writer, Reader } from 'protobufjs/minimal';
 export declare const protobufPackage = "alice.checkers.checkers";
 export interface SystemInfo {
-    creator: string;
     nextId: number;
 }
 export declare const SystemInfo: {

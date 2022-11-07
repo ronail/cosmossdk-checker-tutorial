@@ -1,7 +1,6 @@
 import { Writer, Reader } from 'protobufjs/minimal';
 export declare const protobufPackage = "alice.checkers.checkers";
 export interface StoredGame {
-    creator: string;
     index: string;
     game: string;
     turn: string;

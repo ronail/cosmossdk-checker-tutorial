@@ -13,7 +13,9 @@ func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		// this line is used by starport scaffolding # ibc/genesistype/default
 		// this line is used by starport scaffolding # genesis/types/default
-		SystemInfo:     nil,
+		SystemInfo: &SystemInfo{
+			NextId: uint64(DefaultIndex),
+		},
 		StoredGameList: []*StoredGame{},
 		NextGame: &NextGame{
 			Creator: "",

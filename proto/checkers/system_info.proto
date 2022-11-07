@@ -6,6 +6,6 @@ option go_package = "github.com/alice/checkers/x/checkers/types";
 import "gogoproto/gogo.proto";
 
 message SystemInfo {
-  string creator = 1;
-  uint64 nextId = 2; 
+  uint64 nextId = 1;
+ 
 }

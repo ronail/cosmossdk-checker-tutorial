@@ -2,14 +2,11 @@
 import * as Long from 'long';
 import { util, configure, Writer, Reader } from 'protobufjs/minimal';
 export const protobufPackage = 'alice.checkers.checkers';
-const baseSystemInfo = { creator: '', nextId: 0 };
+const baseSystemInfo = { nextId: 0 };
 export const SystemInfo = {
     encode(message, writer = Writer.create()) {
-        if (message.creator !== '') {
-            writer.uint32(10).string(message.creator);
-        }
         if (message.nextId !== 0) {
-            writer.uint32(16).uint64(message.nextId);
+            writer.uint32(8).uint64(message.nextId);
         }
         return writer;
     },
@@ -21,9 +18,6 @@ export const SystemInfo = {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.creator = reader.string();
-                    break;
-                case 2:
                     message.nextId = longToNumber(reader.uint64());
                     break;
                 default:
@@ -35,12 +29,6 @@ export const SystemInfo = {
     },
     fromJSON(object) {
         const message = { ...baseSystemInfo };
-        if (object.creator !== undefined && object.creator !== null) {
-            message.creator = String(object.creator);
-        }
-        else {
-            message.creator = '';
-        }
         if (object.nextId !== undefined && object.nextId !== null) {
             message.nextId = Number(object.nextId);
         }
@@ -51,18 +39,11 @@ export const SystemInfo = {
     },
     toJSON(message) {
         const obj = {};
-        message.creator !== undefined && (obj.creator = message.creator);
         message.nextId !== undefined && (obj.nextId = message.nextId);
         return obj;
     },
     fromPartial(object) {
         const message = { ...baseSystemInfo };
-        if (object.creator !== undefined && object.creator !== null) {
-            message.creator = object.creator;
-        }
-        else {
-            message.creator = '';
-        }
         if (object.nextId !== undefined && object.nextId !== null) {
             message.nextId = object.nextId;
         }

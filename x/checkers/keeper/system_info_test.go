@@ -11,9 +11,7 @@ import (
 )
 
 func createTestSystemInfo(keeper *keeper.Keeper, ctx sdk.Context) types.SystemInfo {
-	item := types.SystemInfo{
-		Creator: "any",
-	}
+	item := types.SystemInfo{}
 	keeper.SetSystemInfo(ctx, item)
 	return item
 }

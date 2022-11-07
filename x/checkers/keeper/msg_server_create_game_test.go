@@ -46,12 +46,11 @@ func TestCreate1GameHasSaved(t *testing.T) {
 	game1, found1 := keeper.GetStoredGame(sdk.UnwrapSDKContext(context), "1")
 	require.True(t, found1)
 	require.EqualValues(t, types.StoredGame{
-		Creator: alice,
-		Index:   "1",
-		Game:    "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
-		Turn:    "b",
-		Red:     bob,
-		Black:   carol,
+		Index: "1",
+		Game:  "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
+		Turn:  "b",
+		Red:   bob,
+		Black: carol,
 	}, game1)
 }
 

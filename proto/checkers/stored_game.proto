@@ -6,11 +6,10 @@ option go_package = "github.com/alice/checkers/x/checkers/types";
 import "gogoproto/gogo.proto";
 
 message StoredGame {
-  string creator = 1;
-  string index = 2;
-  string game = 3; 
-  string turn = 4; 
-  string red = 5; 
-  string black = 6; 
-  uint64 moveCount = 7;
+  string index = 1;
+  string game = 2; 
+  string turn = 3; 
+  string red = 4; 
+  string black = 5; 
+  uint64 moveCount = 6;
 }

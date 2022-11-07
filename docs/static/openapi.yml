@@ -57,8 +57,6 @@ paths:
                 items:
                   type: object
                   properties:
-                    creator:
-                      type: string
                     index:
                       type: string
                     game:
@@ -179,8 +177,6 @@ paths:
               StoredGame:
                 type: object
                 properties:
-                  creator:
-                    type: string
                   index:
                     type: string
                   game:
@@ -232,8 +228,6 @@ paths:
               SystemInfo:
                 type: object
                 properties:
-                  creator:
-                    type: string
                   nextId:
                     type: string
                     format: uint64
@@ -19392,8 +19386,6 @@ definitions:
         items:
           type: object
           properties:
-            creator:
-              type: string
             index:
               type: string
             game:
@@ -19449,8 +19441,6 @@ definitions:
       StoredGame:
         type: object
         properties:
-          creator:
-            type: string
           index:
             type: string
           game:
@@ -19470,16 +19460,12 @@ definitions:
       SystemInfo:
         type: object
         properties:
-          creator:
-            type: string
           nextId:
             type: string
             format: uint64
   alice.checkers.checkers.StoredGame:
     type: object
     properties:
-      creator:
-        type: string
       index:
         type: string
       game:
@@ -19496,8 +19482,6 @@ definitions:
   alice.checkers.checkers.SystemInfo:
     type: object
     properties:
-      creator:
-        type: string
       nextId:
         type: string
         format: uint64
